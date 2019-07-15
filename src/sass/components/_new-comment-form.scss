@@ -1,0 +1,13 @@
+.NewCommentForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &__button {
+        @extend .action-button;
+
+        align-self: flex-end;
+        margin-bottom: 0.4rem;
+    }
+    margin-bottom: 0.4rem;
+}

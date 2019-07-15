@@ -1,0 +1,13 @@
+.Toggle__button {
+    padding: 0.4rem 0.8rem;
+    background-color: $color-orange-light;
+    border-radius: 0.4rem;
+    margin-right: 0.4rem;
+}
+
+.Toggle__button {
+    &--selected {
+        @extend .Toggle__button;
+        background-color: $color-orange-strong;
+    }
+}

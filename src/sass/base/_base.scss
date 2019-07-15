@@ -1,0 +1,18 @@
+/**** Global reset ****/
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    // This defines what 1rem is
+    font-size: 62.5%; /* bad practice: 10px, user cannot overwrite */
+}
+
+body {
+    box-sizing: border-box; 
+}

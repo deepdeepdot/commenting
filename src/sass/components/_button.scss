@@ -1,0 +1,35 @@
+.action-button {
+    padding: 0.4rem 0.8rem;
+    margin-left: 0.6rem;
+    line-height: 1.7rem;
+    & > span {
+        margin-left: 0.8rem;
+    }
+    border-radius: 0.4rem;
+    border: 0;
+}
+
+.action-button:active,
+.action-button:focus,
+.action-button:visited {
+    outline: 0
+}
+
+.action-button {
+    transition: all 0.2s ease;
+    color: white;
+    background-color: $color-seagreen-strong;
+
+    & svg {
+        color: $color-skyblue-strong;
+        transition: all 0.2s ease;
+    }
+}
+
+.action-button:hover {
+    background-color: $color-seagreen-light;
+    & svg {
+        color: $color-skyblue-light;
+    }
+}
+

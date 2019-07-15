@@ -1,0 +1,50 @@
+.TagChooser {
+    min-width: 6rem;
+    padding: 0.8rem;
+
+    background-color: #eee;
+    color: black;
+
+    &__control {
+        display: flex;
+    }
+
+        &__input {
+            border-radius: 0.4rem;
+            border: none;
+            min-width: 16rem;
+            padding: 0.4rem;
+            margin-bottom: 0.2rem;
+        }
+        &__button {
+            @extend .action-button;
+        }
+
+    &__selection {
+        li {
+            button {
+                margin-left: 0;
+            }
+            margin: 0;
+        }
+
+        .TagList {
+            flex-direction: column;
+        }
+    }
+}
+
+.popup-content.tag-selector-popup-content {
+    min-width: 30rem;
+}
+
+.tag-selector-close {
+    display: flex;
+    flex-direction: column;
+    & > button {
+        padding: 0.4rem 0.8rem;
+        margin-bottom: 0.4rem;
+        background-color: white;
+        align-self: flex-end;
+    }
+}
