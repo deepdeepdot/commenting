@@ -1,8 +1,8 @@
 ## README
 
 ```
-git clone <project>
-cd <project>
+git clone https://github.com/deepdeepdot/commenting.git
+cd commenting
 yarn
 yarn start
 ```
