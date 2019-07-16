@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "id": 1,
+      "title": "1. <h1> and italic",
+      "description": "<h1>Some <i>Italic</i> content</h1>",
+      "tags": [
+        "bug",
+        "dup",
+        "help wanted",
+        "question",
+        "wontfix",
+        "italic"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "2. TextArea",
+      "description": "<h3>Text Area</h3><textarea></textarea>",
+      "tags": [
+        "bug",
+        "dup",
+        "help wanted",
+        "question",
+        "wontfix",
+        "h3",
+        "textarea"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "3. List",
+      "description": "<h3>List</h3><ul><li>Item 1</li><li>Item 22222222</li><li>Item 2</li></ul>",
+      "tags": [
+        "docs",
+        "good first issue",
+        "h3",
+        "ul"
+      ]
+    },
+    {
+      "title": "Medical image analysis competitions",
+      "description": "<h4>Some content</h4>",
+      "tags": [
+        "docs"
+      ],
+      "id": 4
+    }
+  ]
+}
