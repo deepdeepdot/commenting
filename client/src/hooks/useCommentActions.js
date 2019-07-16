@@ -3,7 +3,7 @@ import useCommentState from "./useCommentState";
 import axios from "axios";
 
 // useAxios(): This idea doesn't work... hooks cannot be inside callbacks!
-const USE_AJAX = false;
+const USE_AJAX = true;
 const API_BASE_URL = 'http://localhost:8080';
 
 function getInitialComments() {
