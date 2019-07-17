@@ -1,0 +1,27 @@
+// #root {
+//     padding: 3rem;
+// }
+
+// .LoadingPanel {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     width: calc(100vw - 2 * 3rem);
+//     height: calc(100vh - 2 * 3rem);
+//     background-color: rgba(127, 256, 92, 0.3);
+//     z-index: -1;
+// }
+
+.App {
+    padding: 3rem;
+}
+
+.LoadingPanel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(127, 256, 92, 0.3);
+    z-index: 10;
+}

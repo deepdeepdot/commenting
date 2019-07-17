@@ -27,13 +27,14 @@ function NewCommentForm(props) {
           <FontAwesomeIcon icon={faPlusCircle} />
           <span>Add New Comment</span>
         </button>
-        {hiding && <Comment
+        {hiding &&
+          <Comment
             createNewComment
             {...comment}
             addComment={addComment}
             allTags={allTags}
           />
-          }
+        }
       </div>
     );
 }

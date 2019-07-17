@@ -1,7 +1,7 @@
 import React from "react";
 
 let noop = (label) => {
-    console.log('Please override noop!')
+    console.log("Please override ToggleTag.noop!");
 };
 
 function ToggleTag({ label, selected, onSelected = noop }) {

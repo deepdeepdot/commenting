@@ -3,10 +3,13 @@ import useCommentState from "./useCommentState";
 import axios from "axios";
 
 // useAxios(): This idea doesn't work... hooks cannot be inside callbacks!
-const USE_AJAX = true;
+const USE_IN_MEMORY = false;
+const USE_AJAX_WITHOUT_COMMENTS_RELOAD = true;
 const API_BASE_URL = 'http://localhost:8080';
 
 function getInitialComments() {
+  const NUM_ELTS = 10;
+
   let tagSets = [
     ["bug", "help wanted", "question", "wontfix", "dup"],
     ["docs", "help wanted", "good first issue"]
@@ -16,7 +19,7 @@ function getInitialComments() {
     description: "<h1>Some <i>Italic</i> content</h1>",
     tags: ["one", "two", "three"]
   };
-  let spaces = new Array(2).fill(null);
+  let spaces = new Array(NUM_ELTS).fill(null);
   let initialComments = spaces.map((_, idx) => ({
     ...comment,
     id: idx,
@@ -52,6 +55,7 @@ function useCommentActions() {
       let tags = selectedTags;
       setComments(res.data);
       setSelectedTags(tags); // restore selected tags
+
       setIsLoading(false);
     } catch (error) {
       setError(error);
@@ -59,7 +63,7 @@ function useCommentActions() {
   }
 
   useEffect(() => {
-    // Pretty horrible copy/paste (but react depedencies require this pattern)
+    // Pretty horrible copy/paste (but react's reactivity require this pattern)
     async function loadComments() {
       setIsLoading(true);
       try {
@@ -74,13 +78,13 @@ function useCommentActions() {
     }
 
     // very first time, only once
-    if (USE_AJAX) {
-      loadComments();
-      // TODO: showAll option (including untagged ones)
-    } else {
+    if (USE_IN_MEMORY) {
       let initialComments = getInitialComments();
       setComments(initialComments);
       setSelectedTags(["bug", "good first issue"]);
+    } else {
+      loadComments();
+      // TODO: showAll option (including untagged ones)
     }
   }, [setComments, setSelectedTags]);
 
@@ -88,47 +92,61 @@ function useCommentActions() {
     let firstQueryOk = false;
     setIsLoading(true);
     try {
-      const res = await axios[method.toLowerCase()](url, options);
+      const res = await axios[method](url, options);
       console.log('runQuery', res.data);
       firstQueryOk = true;
-      // setIsLoading(false);
+      if (USE_AJAX_WITHOUT_COMMENTS_RELOAD) {
+        setIsLoading(false);
+      }
+      return res.data;
     } catch (error) {
       setError(error);
     }
-    if (!firstQueryOk) return;
 
-    // Load updated comments and refresh app
-    loadComments();
+    if (USE_IN_MEMORY || !USE_AJAX_WITHOUT_COMMENTS_RELOAD) {
+      if (!firstQueryOk) return;
+      // Load updated comments and refresh app
+      loadComments();
+    }
   }
 
-  let add = comment => {
-      if (USE_AJAX) {
-        runQuery('post', getApiUrl('/comments'), comment);
-      } else {
-        comment.id = comments.length;
-        setComments([...comments, comment]);
-      }
+  let add = async (comment) => {
+    let newComment;
+
+    if (USE_IN_MEMORY) {
+      newComment = comment;
+      newComment.id = comments.length;
+    } else {
+      newComment = await runQuery('post', getApiUrl('/comments'), comment);
+    }
+
+    if (USE_IN_MEMORY || USE_AJAX_WITHOUT_COMMENTS_RELOAD) {
+      setComments([...comments, newComment]);
+    }
   }
 
-  let remove = id => {
-      if (USE_AJAX) {
-        runQuery("delete", getApiUrl(`/comments/${id}`));
-      } else {
-        setComments(comments.filter(comment => comment.id !== id));
-      }
+  let remove = async (id) => {
+    if (!USE_IN_MEMORY) {
+      await runQuery("delete", getApiUrl(`/comments/${id}`));
+    }
+    if (USE_IN_MEMORY || USE_AJAX_WITHOUT_COMMENTS_RELOAD) {
+      setComments(comments.filter(comment => comment.id !== id));
+    }
   }
 
-  let update = (id, updatedComment) => {
-      if (USE_AJAX) {
-        runQuery('put', getApiUrl(`/comments/${id}`), updatedComment);
-      } else {
-        setComments(
-          comments.map(comment => {
-            if (comment.id === id) return updatedComment;
-            return comment;
-          })
-        );
-      }
+  let update = async (id, comment) => {
+    let updatedComment = USE_IN_MEMORY
+      ? comment
+      : await runQuery("put", getApiUrl(`/comments/${id}`), comment);
+
+    if (USE_IN_MEMORY || USE_AJAX_WITHOUT_COMMENTS_RELOAD) {
+      setComments(
+        comments.map(comment => {
+          if (comment.id === id) return updatedComment;
+          return comment;
+        })
+      );
+    }
   }
 
   let onTagSelected = label => {

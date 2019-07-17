@@ -2,6 +2,7 @@
 @import "abstracts/mixins";
 @import "abstracts/variables";
 
+
 @import "base/animations";
 @import "base/base";
 @import "base/colors";
@@ -9,13 +10,12 @@
 @import "base/utilities";
 
 
+@import "layout/grid";
 @import "layout/header";
+@import "layout/loadingpanel";
 @import "pages/app";
 
-@import "layout/grid";
 
-
-// @import "components/*"; // https://github.com/chriseppstein/sass-globbing
 @import "components/button";
 @import "components/comment";
 @import "components/new-comment-form";
@@ -24,3 +24,4 @@
 @import "components/taglist";
 @import "components/taglisttoggler";
 @import "components/tagfilter";
+@import "components/loadingpanel";

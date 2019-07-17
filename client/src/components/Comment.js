@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPen, faTimesCircle, faSave } from "@fortawesome/free-solid-svg-icons";
-
 import TagBar from './TagBar';
 
 function Comment(props) {
@@ -34,58 +33,59 @@ function Comment(props) {
     </>
   );
 
-  let handleChange = (e) => {
-    setContentTitle(e.target.value);
+  let handleSave = (e) => {
+    if (props.createNewComment) {
+      addComment({
+        title: contentTitle,
+        description: contentDescription,
+        tags: contentTags
+      });
+      setContentDescription("");
+      setContentTitle("");
+      setContentTags([]);
+    } else {
+      setIsEditing(false);
+
+      updateComment(id, {
+        id: id,
+        title: contentTitle,
+        description: contentDescription,
+        tags: contentTags
+      });
+    }
   }
+
+  let handleCancel = e => {
+    if (props.createNewComment) {
+      setContentDescription("");
+      setContentTitle("");
+      setContentTags([]);
+    }
+    setIsEditing(false);
+  };
 
   let editActions = (
     <>
       <button
         className="Comment__button"
-        onClick={e => {
-          if (props.createNewComment) {
-            addComment({
-              title: contentTitle,
-              description: contentDescription,
-              tags: contentTags
-            });
-            setContentDescription('');
-            setContentTitle('');
-            setContentTags([]);
-
-          } else {
-            setIsEditing(false);
-
-            updateComment(id, {
-              id: id,
-              title: contentTitle,
-              description: contentDescription,
-              tags: contentTags
-            });
-          }
-        }}
+        onClick={handleSave}
       >
         <FontAwesomeIcon icon={faSave} />
         <span>Save</span>
       </button>
       <button
         className="Comment__button"
-        onClick={e => {
-          if (props.createNewComment) {
-            setContentDescription("");
-            setContentTitle("");
-            setContentTags([]);
-            setIsEditing(false);
-          } else {
-            setIsEditing(false);
-          }
-        }}
+        onClick={handleCancel}
       >
         <FontAwesomeIcon icon={faTimesCircle} />
         <span>Cancel</span>
       </button>
     </>
   );
+
+  let handleChange = e => {
+    setContentTitle(e.target.value);
+  };
 
   let handleTextAreaChange = (e) => {
     setContentDescription(e.target.value);
@@ -117,6 +117,9 @@ function Comment(props) {
     let newTags = [...contentTags, label];;
     updateCommentTags(id, newTags);
   }
+
+  // Test with and without memo()
+  // console.log("RENDER COMMENT", contentTitle);
 
   return (
     <div className="Comment">
@@ -163,4 +166,16 @@ function Comment(props) {
   );
 }
 
-export default Comment;
+// export default Comment;
+
+// Optimization
+// It works usually, except for the new Comment: no toggle tags, hence check on 'id' for falsy
+export default React.memo(Comment, function areEqual(prevProps, nextProps) {
+  return (
+    nextProps.id && // new Comment doesn't have an ID yet and we want to refresh in this scenario
+    prevProps.title === nextProps.title &&
+    prevProps.description === nextProps.description &&
+    // eslint-disable-next-line eqeqeq
+    JSON.stringify(prevProps.tags) == JSON.stringify(nextProps.tags)
+  );
+});

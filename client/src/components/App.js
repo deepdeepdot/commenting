@@ -1,8 +1,9 @@
 import React from "react";
 import CommentList from "./CommentList";
 import NewCommentForm from "./NewCommentForm";
-import TagListToggler from "./TagListToggler";
-import useCommentActions from '../hooks/useCommentActions';
+import TagFilter from "./TagFilter";
+import LoadingPanel from "./LoadingPanel";
+import useCommentActions from "../hooks/useCommentActions";
 
 import "../sass/main.scss"; // this is for triggering automatic sass rebuilds
 
@@ -20,32 +21,27 @@ function App() {
   } = useCommentActions();
 
   if (error) {
-    return <h3>Found some error</h3>
+    return <h3>Found some error</h3>;
   }
-  if (isLoading) {
-    return <div>Loading.... (use a loader spinner instead)</div>;
-  }
+  // isLoading = true; // just for testing
   // console.log("RE-RENDER APP");
+
   return (
-    <>
+    <div className="App">
+      {isLoading && <LoadingPanel />}
       <NewCommentForm addComment={add} allTags={allTags} />
 
-      <div className="TagFilter">
-        <h3 className="TagFilter-title">Tag Filter</h3>
-        {/* <button onClick={selectAllTags}>Show ALL</button> */}
-        <TagListToggler
-          toggleTags={selectedToogleTags}
-          onSelected={onTagSelected}
-        />
-      </div>
-
+      <TagFilter
+        selectedToogleTags={selectedToogleTags}
+        onTagSelected={onTagSelected}
+      />
       <CommentList
         allTags={allTags}
         comments={filteredComments}
         removeComment={remove}
         updateComment={update}
       />
-    </>
+    </div>
   );
 }
 
